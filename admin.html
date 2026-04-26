@@ -1,0 +1,486 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة الإدارة -- بوابة الامتحانات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green:#1a6b3c; --green-light:#2d9658; --green-pale:#e8f5ee;
+      --gold:#c9a84c; --gold-light:#f0c96a;
+      --red:#c0392b; --red-light:#fdecea;
+      --dark:#0f1f17; --text:#1a2e22; --muted:#5a7a65;
+      --bg:#f0f4f1; --white:#fff; --border:#d4e8db;
+      --shadow:0 4px 24px rgba(26,107,60,.10); --radius:14px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;}
+
+    /* SIDEBAR */
+    .layout{display:flex;min-height:100vh;}
+    .sidebar{width:240px;background:var(--dark);color:white;display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;}
+    .sidebar-logo{padding:1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:.75rem;}
+    .sidebar-logo .icon{width:40px;height:40px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .sidebar-logo .name{font-family:'Amiri',serif;font-size:1rem;line-height:1.3;}
+    .sidebar-logo .sub{font-size:.65rem;opacity:.5;font-family:'Cairo',sans-serif;}
+    .sidebar-nav{padding:1rem 0;flex:1;}
+    .nav-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem;color:rgba(255,255,255,.65);cursor:pointer;transition:all .2s;font-size:.9rem;font-weight:600;border-right:3px solid transparent;}
+    .nav-item:hover{background:rgba(255,255,255,.07);color:white;}
+    .nav-item.active{background:rgba(45,150,88,.15);color:var(--gold-light);border-right-color:var(--gold);}
+    .nav-icon{font-size:1.1rem;width:20px;text-align:center;}
+    .sidebar-footer{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.1);font-size:.75rem;opacity:.4;}
+
+    /* MAIN */
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+    .topbar-title{font-family:'Amiri',serif;font-size:1.3rem;font-weight:700;}
+    .topbar-actions{display:flex;gap:.75rem;}
+    .btn{padding:.5rem 1.1rem;border-radius:8px;border:none;font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;}
+    .btn-primary{background:var(--green);color:white;}.btn-primary:hover{background:var(--green-light);}
+    .btn-outline{background:white;color:var(--text);border:2px solid var(--border);}.btn-outline:hover{border-color:var(--green);color:var(--green);}
+    .btn-danger{background:#fdecea;color:var(--red);border:none;}.btn-danger:hover{background:#f5c6c2;}
+    .content{flex:1;padding:2rem;overflow-y:auto;}
+
+    /* STATS CARDS */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+    .stat-card{background:var(--white);border-radius:var(--radius);padding:1.25rem;border:1.5px solid var(--border);box-shadow:var(--shadow);}
+    .stat-card .num{font-size:2rem;font-weight:900;color:var(--green);}
+    .stat-card .label{font-size:.8rem;color:var(--muted);font-weight:600;margin-top:.2rem;}
+    .stat-card .icon{font-size:1.8rem;margin-bottom:.5rem;}
+
+    /* UPLOAD AREA */
+    .card{background:var(--white);border-radius:var(--radius);border:1.5px solid var(--border);box-shadow:var(--shadow);margin-bottom:1.5rem;}
+    .card-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .card-title{font-family:'Amiri',serif;font-size:1.1rem;font-weight:700;}
+    .card-body{padding:1.5rem;}
+
+    .upload-zone{border:2.5px dashed var(--border);border-radius:12px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg);}
+    .upload-zone:hover,.upload-zone.drag{border-color:var(--green-light);background:var(--green-pale);}
+    .upload-zone .uz-icon{font-size:3rem;margin-bottom:1rem;}
+    .upload-zone .uz-title{font-size:1rem;font-weight:700;margin-bottom:.4rem;}
+    .upload-zone .uz-sub{font-size:.82rem;color:var(--muted);}
+    .upload-zone input[type=file]{display:none;}
+
+    /* FORM */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;}
+    .form-group{display:flex;flex-direction:column;gap:.4rem;}
+    .form-group.full{grid-column:1/-1;}
+    label{font-size:.82rem;font-weight:700;color:var(--muted);}
+    input,select{padding:.6rem .9rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Cairo',sans-serif;font-size:.9rem;color:var(--text);background:white;outline:none;transition:border .2s;direction:rtl;}
+    input:focus,select:focus{border-color:var(--green-light);}
+    .file-preview{background:var(--green-pale);border:1.5px solid var(--green-light);border-radius:8px;padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;margin-top:.5rem;}
+    .file-preview .fp-icon{font-size:1.5rem;}
+    .file-preview .fp-name{font-size:.85rem;font-weight:700;color:var(--green);flex:1;}
+    .file-preview .fp-size{font-size:.75rem;color:var(--muted);}
+
+    /* TABLE */
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    th{padding:.75rem 1rem;text-align:right;font-size:.78rem;font-weight:700;color:var(--muted);background:var(--bg);border-bottom:2px solid var(--border);}
+    td{padding:.85rem 1rem;border-bottom:1px solid var(--border);font-size:.875rem;vertical-align:middle;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:var(--green-pale);}
+    .badge{padding:.22rem .7rem;border-radius:50px;font-size:.72rem;font-weight:700;white-space:nowrap;}
+    .badge-bac{background:#fdecea;color:var(--red);}
+    .badge-6{background:#f0ebf8;color:#7b5ea7;}
+    .badge-4{background:#e8f4fc;color:#2980b9;}
+    .badge-new{background:var(--green-pale);color:var(--green);}
+    .actions-cell{display:flex;gap:.4rem;}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:white;padding:.75rem 1.5rem;border-radius:50px;font-size:.9rem;font-weight:600;z-index:9999;transition:transform .3s;white-space:nowrap;}
+    .toast.show{transform:translateX(-50%) translateY(0);}
+
+    /* MODAL */
+    .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+    .overlay.open{display:flex;}
+    .modal{background:white;border-radius:20px;width:100%;max-width:520px;box-shadow:0 24px 80px rgba(0,0,0,.25);animation:mIn .25s ease;}
+    @keyframes mIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+    .modal-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .modal-head h3{font-family:'Amiri',serif;font-size:1.1rem;}
+    .modal-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;font-size:1rem;}
+    .modal-body{padding:1.5rem;}
+    .modal-foot{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:.75rem;justify-content:flex-end;}
+
+    @media(max-width:900px){
+      .sidebar{display:none;}
+      .stats-row{grid-template-columns:repeat(2,1fr);}
+      .form-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="icon">📚</div>
+      <div>
+        <div class="name">بوابة الامتحانات</div>
+        <div class="sub">لوحة الإدارة</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="showSection('dashboard')"><span class="nav-icon">🏠</span> لوحة التحكم</div>
+      <div class="nav-item" onclick="showSection('upload')"><span class="nav-icon">⬆️</span> رفع امتحان</div>
+      <div class="nav-item" onclick="showSection('manage')"><span class="nav-icon">📋</span> إدارة الامتحانات</div>
+      <div class="nav-item" onclick="window.open('index.html','_blank')"><span class="nav-icon">🌐</span> عرض الموقع</div>
+    </nav>
+    <div class="sidebar-footer">نسخة 1.0 -- 2025</div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="pageTitle">لوحة التحكم</div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary" onclick="showSection('upload')">⬆️ رفع امتحان جديد</button>
+        <button class="btn btn-outline" onclick="window.open('index.html','_blank')">🌐 الموقع</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ── DASHBOARD ── -->
+      <div id="sec-dashboard">
+        <div class="stats-row">
+          <div class="stat-card"><div class="icon">📄</div><div class="num" id="st-total">0</div><div class="label">إجمالي الامتحانات</div></div>
+          <div class="stat-card"><div class="icon">🎓</div><div class="num" id="st-bac">0</div><div class="label">باكالوريا</div></div>
+          <div class="stat-card"><div class="icon">🏫</div><div class="num" id="st-6">0</div><div class="label">السادسة ابتدائي</div></div>
+          <div class="stat-card"><div class="icon">📐</div><div class="num" id="st-4">0</div><div class="label">الرابعة إعدادي</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">آخر الامتحانات المضافة</span></div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>العنوان</th><th>المستوى</th><th>المادة</th><th>السنة</th><th>الإجراءات</th></tr></thead>
+                <tbody id="recent-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── UPLOAD ── -->
+      <div id="sec-upload" style="display:none">
+        <div class="card">
+          <div class="card-header"><span class="card-title">⬆️ رفع امتحان جديد</span></div>
+          <div class="card-body">
+
+            <!-- Drop zone -->
+            <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+              <input type="file" id="fileInput" accept=".pdf" onchange="handleFile(this.files[0])"/>
+              <div class="uz-icon">📄</div>
+              <div class="uz-title">اسحب ملف PDF هنا أو انقر للاختيار</div>
+              <div class="uz-sub">يُقبل فقط ملفات PDF -- الحجم الأقصى 50 ميغابايت</div>
+            </div>
+            <div id="filePreview" style="display:none" class="file-preview">
+              <span class="fp-icon">📄</span>
+              <span class="fp-name" id="fp-name"></span>
+              <span class="fp-size" id="fp-size"></span>
+              <button class="btn btn-danger" onclick="clearFile()" style="padding:.3rem .7rem;font-size:.8rem;">✕</button>
+            </div>
+
+            <!-- Form -->
+            <div class="form-grid">
+              <div class="form-group full">
+                <label>عنوان الامتحان *</label>
+                <input type="text" id="f-title" placeholder="مثال: الرياضيات -- الباكالوريا -- الدورة العادية"/>
+              </div>
+              <div class="form-group">
+                <label>المستوى الدراسي *</label>
+                <select id="f-level">
+                  <option value="">-- اختر المستوى --</option>
+                  <option value="bac">الباكالوريا</option>
+                  <option value="6">السادسة ابتدائي</option>
+                  <option value="4">الرابعة إعدادي</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>المادة الدراسية *</label>
+                <select id="f-subject">
+                  <option value="">-- اختر المادة --</option>
+                  <option value="math">الرياضيات</option>
+                  <option value="arabic">اللغة العربية</option>
+                  <option value="french">اللغة الفرنسية</option>
+                  <option value="physics">الفيزياء والكيمياء</option>
+                  <option value="svt">علوم الحياة والأرض</option>
+                  <option value="history">التاريخ والجغرافيا</option>
+                  <option value="english">اللغة الإنجليزية</option>
+                  <option value="philosophy">الفلسفة</option>
+                  <option value="islamic">التربية الإسلامية</option>
+                  <option value="other">أخرى</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>السنة *</label>
+                <select id="f-year">
+                  <option value="">-- اختر السنة --</option>
+                  <option value="2025">2025</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                  <option value="2017">2017</option>
+                  <option value="2016">2016</option>
+                  <option value="2015">2015</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>الدورة</label>
+                <select id="f-session">
+                  <option value="الدورة العادية">الدورة العادية</option>
+                  <option value="الدورة الاستدراكية">الدورة الاستدراكية</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>الجهة / المدينة</label>
+                <input type="text" id="f-region" placeholder="مثال: الدار البيضاء"/>
+              </div>
+              <div class="form-group full">
+                <label>ملاحظات (اختياري)</label>
+                <input type="text" id="f-notes" placeholder="أي ملاحظات إضافية..."/>
+              </div>
+            </div>
+
+            <div style="margin-top:1.5rem;display:flex;gap:1rem;">
+              <button class="btn btn-primary" onclick="submitExam()" style="padding:.7rem 2rem;font-size:1rem;">✅ حفظ الامتحان</button>
+              <button class="btn btn-outline" onclick="resetForm()">🔄 إعادة تعيين</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MANAGE ── -->
+      <div id="sec-manage" style="display:none">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📋 جميع الامتحانات</span>
+            <input type="text" id="manageSearch" placeholder="🔍 بحث..." style="width:200px;padding:.4rem .8rem;font-size:.85rem;" oninput="renderManage()"/>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>#</th><th>العنوان</th><th>المستوى</th><th>المادة</th><th>السنة</th><th>الدورة</th><th>PDF</th><th>الإجراءات</th></tr></thead>
+                <tbody id="manage-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- DELETE MODAL -->
+<div class="overlay" id="deleteOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3>تأكيد الحذف</h3><button class="modal-close" onclick="closeDelete()">✕</button></div>
+    <div class="modal-body" style="text-align:center;padding:2rem">
+      <div style="font-size:3rem;margin-bottom:1rem">🗑️</div>
+      <p style="font-weight:600">هل أنت متأكد من حذف هذا الامتحان؟</p>
+      <p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">لا يمكن التراجع عن هذا الإجراء</p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeDelete()">إلغاء</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn" style="background:var(--red);color:white;">حذف نهائياً</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Storage helpers ──
+  const KEY = 'moroccoBacExams';
+
+  function loadExams() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
+    catch { return []; }
+  }
+
+  function saveExams(exams) {
+    localStorage.setItem(KEY, JSON.stringify(exams));
+  }
+
+  // ── File handling ──
+  let currentFile = null;
+  let currentFileData = null;
+
+  function handleFile(file) {
+    if (!file || file.type !== 'application/pdf') { showToast('❌ الرجاء اختيار ملف PDF فقط'); return; }
+    if (file.size > 50 * 1024 * 1024) { showToast('❌ حجم الملف يتجاوز 50 ميغابايت'); return; }
+    currentFile = file;
+    const reader = new FileReader();
+    reader.onload = e => { currentFileData = e.target.result; };
+    reader.readAsDataURL(file);
+    document.getElementById('fp-name').textContent = file.name;
+    document.getElementById('fp-size').textContent = (file.size / 1024).toFixed(0) + ' KB';
+    document.getElementById('filePreview').style.display = 'flex';
+    document.getElementById('dropZone').style.display = 'none';
+  }
+
+  function clearFile() {
+    currentFile = null; currentFileData = null;
+    document.getElementById('fileInput').value = '';
+    document.getElementById('filePreview').style.display = 'none';
+    document.getElementById('dropZone').style.display = 'block';
+  }
+
+  // Drag & drop
+  const dz = document.getElementById('dropZone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+  dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag'); handleFile(e.dataTransfer.files[0]); });
+
+  // ── Submit ──
+  const subjectNames = {math:'الرياضيات',arabic:'اللغة العربية',french:'اللغة الفرنسية',physics:'الفيزياء والكيمياء',svt:'علوم الحياة والأرض',history:'التاريخ والجغرافيا',english:'اللغة الإنجليزية',philosophy:'الفلسفة',islamic:'التربية الإسلامية',other:'أخرى'};
+  const levelNames = {bac:'الباكالوريا','6':'السادسة ابتدائي','4':'الرابعة إعدادي'};
+
+  function submitExam() {
+    const title   = document.getElementById('f-title').value.trim();
+    const level   = document.getElementById('f-level').value;
+    const subject = document.getElementById('f-subject').value;
+    const year    = document.getElementById('f-year').value;
+    const session = document.getElementById('f-session').value;
+    const region  = document.getElementById('f-region').value.trim();
+    const notes   = document.getElementById('f-notes').value.trim();
+
+    if (!title || !level || !subject || !year) { showToast('❗ يرجى ملء جميع الحقول الإلزامية'); return; }
+
+    const exams = loadExams();
+    const newExam = {
+      id: Date.now(),
+      title, level, subject, year: parseInt(year),
+      session, region: region || 'غير محدد', notes,
+      hasPdf: !!currentFileData,
+      pdfData: currentFileData || null,
+      fileName: currentFile ? currentFile.name : null,
+      addedAt: new Date().toISOString()
+    };
+
+    exams.unshift(newExam);
+    saveExams(exams);
+    showToast('✅ تم حفظ الامتحان بنجاح!');
+    resetForm();
+    updateStats();
+    showSection('manage');
+  }
+
+  function resetForm() {
+    ['f-title','f-region','f-notes'].forEach(id => document.getElementById(id).value = '');
+    ['f-level','f-subject','f-year'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-session').value = 'الدورة العادية';
+    clearFile();
+  }
+
+  // ── Stats ──
+  function updateStats() {
+    const exams = loadExams();
+    document.getElementById('st-total').textContent = exams.length;
+    document.getElementById('st-bac').textContent   = exams.filter(e=>e.level==='bac').length;
+    document.getElementById('st-6').textContent     = exams.filter(e=>e.level==='6').length;
+    document.getElementById('st-4').textContent     = exams.filter(e=>e.level==='4').length;
+    renderRecent(exams);
+  }
+
+  // ── Recent table ──
+  function renderRecent(exams) {
+    const tbody = document.getElementById('recent-tbody');
+    const recent = exams.slice(0, 8);
+    if (!recent.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted)">لا توجد امتحانات بعد -- ابدأ برفع أول امتحان!</td></tr>'; return; }
+    tbody.innerHTML = recent.map(e => `
+      <tr>
+        <td><strong>${e.title}</strong></td>
+        <td><span class="badge badge-${e.level}">${levelNames[e.level]||e.level}</span></td>
+        <td>${subjectNames[e.subject]||e.subject}</td>
+        <td>${e.year}</td>
+        <td class="actions-cell">
+          ${e.hasPdf ? `<button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.75rem" onclick="viewPdf(${e.id})">👁️ عرض</button>` : '<span style="color:var(--muted);font-size:.75rem">بدون PDF</span>'}
+          <button class="btn btn-danger" style="padding:.3rem .6rem;font-size:.75rem" onclick="askDelete(${e.id})">🗑️</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ── Manage table ──
+  function renderManage() {
+    const q = (document.getElementById('manageSearch')?.value||'').trim();
+    let exams = loadExams();
+    if (q) exams = exams.filter(e => e.title.includes(q) || String(e.year).includes(q));
+    const tbody = document.getElementById('manage-tbody');
+    if (!exams.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">لا توجد نتائج</td></tr>'; return; }
+    tbody.innerHTML = exams.map((e,i) => `
+      <tr>
+        <td style="color:var(--muted)">${i+1}</td>
+        <td><strong>${e.title}</strong>${e.notes?`<br/><small style="color:var(--muted)">${e.notes}</small>`:''}</td>
+        <td><span class="badge badge-${e.level}">${levelNames[e.level]||e.level}</span></td>
+        <td>${subjectNames[e.subject]||e.subject}</td>
+        <td>${e.year}</td>
+        <td>${e.session}</td>
+        <td>${e.hasPdf?'<span style="color:var(--green);font-weight:700">✅ نعم</span>':'<span style="color:#aaa">--</span>'}</td>
+        <td class="actions-cell">
+          ${e.hasPdf?`<button class="btn btn-outline" style="padding:.3rem .6rem;font-size:.75rem" onclick="viewPdf(${e.id})">👁️</button>`:''}
+          <button class="btn btn-danger" style="padding:.3rem .6rem;font-size:.75rem" onclick="askDelete(${e.id})">🗑️</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ── View PDF ──
+  function viewPdf(id) {
+    const exam = loadExams().find(e=>e.id===id);
+    if (!exam || !exam.pdfData) { showToast('لا يوجد PDF لهذا الامتحان'); return; }
+    const win = window.open('');
+    win.document.write(`<html><head><title>${exam.title}</title></head><body style="margin:0"><embed src="${exam.pdfData}" type="application/pdf" width="100%" height="100%"/></body></html>`);
+  }
+
+  // ── Delete ──
+  let deleteId = null;
+  function askDelete(id) { deleteId=id; document.getElementById('deleteOverlay').classList.add('open'); }
+  function closeDelete() { deleteId=null; document.getElementById('deleteOverlay').classList.remove('open'); }
+  document.getElementById('confirmDeleteBtn').onclick = () => {
+    if (!deleteId) return;
+    const exams = loadExams().filter(e=>e.id!==deleteId);
+    saveExams(exams);
+    closeDelete();
+    updateStats();
+    renderManage();
+    showToast('🗑️ تم حذف الامتحان');
+  };
+
+  // ── Navigation ──
+  const sections = ['dashboard','upload','manage'];
+  function showSection(name) {
+    sections.forEach(s => { document.getElementById('sec-'+s).style.display = s===name?'block':'none'; });
+    document.querySelectorAll('.nav-item').forEach((el,i)=>{
+      el.classList.toggle('active', ['dashboard','upload','manage'][i]===name);
+    });
+    const titles = {dashboard:'لوحة التحكم', upload:'رفع امتحان جديد', manage:'إدارة الامتحانات'};
+    document.getElementById('pageTitle').textContent = titles[name]||'';
+    if (name==='manage') renderManage();
+    if (name==='dashboard') updateStats();
+  }
+
+  // ── Toast ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 3000);
+  }
+
+  // ── Init ──
+  updateStats();
+</script>
+</body>
+</html>

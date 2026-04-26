@@ -1,0 +1,443 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>بوابة الامتحانات المغربية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green:#1a6b3c; --green-light:#2d9658; --green-pale:#e8f5ee;
+      --red:#c0392b; --gold:#c9a84c; --gold-light:#f0c96a;
+      --dark:#0f1f17; --text:#1a2e22; --muted:#5a7a65;
+      --bg:#f5f9f6; --white:#fff; --border:#d4e8db;
+      --shadow:0 4px 24px rgba(26,107,60,.10); --radius:16px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;}
+
+    /* HEADER */
+    header{background:linear-gradient(135deg,var(--dark) 0%,var(--green) 60%,#1a4a2a 100%);color:white;padding:0 2rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3);}
+    .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:70px;gap:1rem;}
+    .logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:white;}
+    .logo-icon{width:44px;height:44px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+    .logo-text{font-family:'Amiri',serif;font-size:1.3rem;font-weight:700;line-height:1.2;}
+    .logo-sub{font-size:.65rem;opacity:.7;font-weight:300;}
+    nav{display:flex;gap:.25rem;}
+    nav a{color:rgba(255,255,255,.85);text-decoration:none;padding:.4rem .9rem;border-radius:8px;font-size:.9rem;font-weight:600;transition:all .2s;}
+    nav a:hover,nav a.active{background:rgba(255,255,255,.15);color:white;}
+    .admin-link{background:rgba(201,168,76,.2);color:var(--gold-light)!important;border:1px solid rgba(201,168,76,.4);}
+
+    /* HERO */
+    .hero{background:linear-gradient(160deg,var(--dark) 0%,#1a4a2a 40%,var(--green) 100%);color:white;padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");}
+    .flag-strip{display:flex;justify-content:center;margin-bottom:1.5rem;}
+    .flag-strip span{height:6px;border-radius:3px;}
+    .f-red{width:40px;background:var(--red);}
+    .f-green{width:80px;background:var(--green-light);}
+    .hero h1{font-family:'Amiri',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;margin-bottom:1rem;line-height:1.3;}
+    .hero h1 span{color:var(--gold-light);}
+    .hero p{font-size:1.1rem;opacity:.85;max-width:600px;margin:0 auto 2.5rem;line-height:1.8;}
+    .search-wrap{max-width:640px;margin:0 auto;position:relative;}
+    .search-wrap input{width:100%;padding:1rem 1.5rem 1rem 3.5rem;border-radius:50px;border:none;font-family:'Cairo',sans-serif;font-size:1rem;background:white;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,.25);outline:none;direction:rtl;}
+    .search-wrap input::placeholder{color:#aaa;}
+    .search-icon{position:absolute;left:1.2rem;top:50%;transform:translateY(-50%);color:var(--green);font-size:1.2rem;}
+
+    /* STATS */
+    .stats-bar{background:var(--white);border-bottom:1px solid var(--border);padding:1rem 2rem;}
+    .stats-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;}
+    .stat{text-align:center;}
+    .stat-num{font-size:1.6rem;font-weight:900;color:var(--green);}
+    .stat-label{font-size:.8rem;color:var(--muted);font-weight:600;}
+
+    /* FILTERS TOGGLE BAR */
+    .filters-toggle-bar{background:var(--white);border-bottom:1px solid var(--border);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+    .toggle-left{font-size:.85rem;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:.5rem;}
+    .toggle-btn{display:flex;align-items:center;gap:.4rem;padding:.3rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:white;font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;}
+    .toggle-btn:hover{border-color:var(--green);color:var(--green);}
+    .toggle-btn.is-open{border-color:var(--red);color:var(--red);}
+    .toggle-btn.is-open:hover{background:#fdecea;}
+
+    /* FILTERS PANEL */
+    .filters-section{background:var(--white);border-bottom:2px solid var(--border);overflow:hidden;max-height:0;transition:max-height .35s ease;}
+    .filters-section.open{max-height:300px;}
+    .filters-inner{max-width:1200px;margin:0 auto;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;padding:1.25rem 2rem;}
+    .filter-label{font-size:.85rem;font-weight:700;color:var(--muted);white-space:nowrap;}
+    .filter-group{display:flex;gap:.5rem;flex-wrap:wrap;}
+    .filter-btn{padding:.4rem 1rem;border-radius:50px;border:2px solid var(--border);background:white;color:var(--text);font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .filter-btn:hover{border-color:var(--green-light);color:var(--green);}
+    .filter-btn.active{background:var(--green);border-color:var(--green);color:white;}
+    .filter-btn.level-bac.active{background:var(--red);border-color:var(--red);}
+    .filter-btn.level-6.active{background:#7b5ea7;border-color:#7b5ea7;}
+    .filter-btn.level-4.active{background:#2980b9;border-color:#2980b9;}
+    .filter-divider{width:1px;height:24px;background:var(--border);}
+    .close-filters-btn{padding:.35rem .9rem;border-radius:50px;border:1.5px solid var(--red);background:white;color:var(--red);font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .close-filters-btn:hover{background:#fdecea;}
+
+    /* MAIN */
+    .main{max-width:1200px;margin:0 auto;padding:2rem;}
+    .section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;}
+    .section-title{font-family:'Amiri',serif;font-size:1.5rem;font-weight:700;color:var(--dark);}
+    .section-count{background:var(--green-pale);color:var(--green);font-size:.8rem;font-weight:700;padding:.2rem .7rem;border-radius:50px;}
+
+    /* CARDS */
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;}
+    .exam-card{background:var(--white);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;transition:all .25s;cursor:pointer;box-shadow:var(--shadow);animation:fadeUp .4s ease both;}
+    .exam-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(26,107,60,.15);border-color:var(--green-light);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .card-top{padding:1.25rem 1.25rem .75rem;display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;}
+    .card-badge{padding:.25rem .75rem;border-radius:50px;font-size:.75rem;font-weight:700;flex-shrink:0;}
+    .badge-bac{background:#fdecea;color:var(--red);}
+    .badge-6{background:#f0ebf8;color:#7b5ea7;}
+    .badge-4{background:#e8f4fc;color:#2980b9;}
+    .card-year{font-size:.8rem;color:var(--muted);font-weight:600;}
+    .card-title{padding:0 1.25rem;font-family:'Amiri',serif;font-size:1.15rem;font-weight:700;color:var(--dark);line-height:1.4;}
+    .card-meta{padding:.6rem 1.25rem;display:flex;gap:1rem;font-size:.8rem;color:var(--muted);font-weight:600;}
+    .card-meta span{display:flex;align-items:center;gap:.3rem;}
+    .card-actions{padding:.75rem 1.25rem 1.25rem;display:flex;gap:.6rem;}
+    .btn-view{flex:1;padding:.55rem;border-radius:10px;border:none;background:var(--green);color:white;font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:.4rem;}
+    .btn-view:hover{background:var(--green-light);}
+    .btn-download{padding:.55rem .9rem;border-radius:10px;border:2px solid var(--border);background:white;color:var(--text);font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.4rem;}
+    .btn-download:hover{border-color:var(--green);color:var(--green);}
+    .btn-download:disabled{opacity:.35;cursor:default;}
+
+    /* EMPTY */
+    .empty{text-align:center;padding:4rem 2rem;color:var(--muted);}
+    .empty-icon{font-size:3.5rem;margin-bottom:1rem;}
+    .empty h3{font-size:1.2rem;font-weight:700;margin-bottom:.5rem;color:var(--text);}
+    .empty p{font-size:.9rem;}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+    .modal-overlay.open{display:flex;}
+    .modal{background:white;border-radius:20px;width:100%;max-width:820px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3);animation:mIn .3s ease;}
+    @keyframes mIn{from{opacity:0;transform:scale(.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .modal-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;border-radius:20px 20px 0 0;z-index:1;}
+    .modal-title{font-family:'Amiri',serif;font-size:1.3rem;font-weight:700;}
+    .modal-close{width:36px;height:36px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+    .modal-close:hover{background:var(--border);}
+    .modal-body{padding:1.5rem;}
+    .modal-actions{padding:1.25rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:.75rem;justify-content:flex-end;}
+    .no-pdf-box{background:#f0f0f0;border-radius:12px;height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:var(--muted);}
+
+    /* FOOTER */
+    footer{background:var(--dark);color:rgba(255,255,255,.7);text-align:center;padding:2rem;margin-top:4rem;font-size:.85rem;}
+    footer strong{color:var(--gold-light);}
+
+    @media(max-width:640px){nav{display:none;}.stats-inner{gap:1.5rem;}.cards-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">📚</div>
+      <div>
+        <div class="logo-text">بوابة الامتحانات</div>
+        <div class="logo-sub">المملكة المغربية</div>
+      </div>
+    </a>
+    <nav>
+      <a href="#" class="active">الرئيسية</a>
+      <a href="#">الباكالوريا</a>
+      <a href="#">السادسة ابتدائي</a>
+      <a href="#">الرابعة إعدادي</a>
+      <a href="admin.html" class="admin-link">⚙️ الإدارة</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="flag-strip">
+    <span class="f-red"></span>
+    <span class="f-green"></span>
+    <span class="f-red"></span>
+  </div>
+  <h1>امتحانات المغرب<br/><span>في متناول يدك</span></h1>
+  <p>منصة شاملة للوصول إلى امتحانات الباكالوريا، السادسة ابتدائي، والرابعة إعدادي</p>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="ابحث عن مادة، سنة، أو مستوى..."/>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num" id="st-total">0</div><div class="stat-label">امتحان متاح</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">مستويات دراسية</div></div>
+    <div class="stat"><div class="stat-num" id="st-subjects">0</div><div class="stat-label">مادة دراسية</div></div>
+    <div class="stat"><div class="stat-num" id="st-years">0</div><div class="stat-label">سنة من الأرشيف</div></div>
+  </div>
+</div>
+
+<!-- FILTERS TOGGLE BAR -->
+<div class="filters-toggle-bar">
+  <div class="toggle-left">🎛️ تصفية النتائج</div>
+  <button class="toggle-btn" id="toggleFiltersBtn" onclick="toggleFilters()">▼ إظهار الفلاتر</button>
+</div>
+
+<!-- FILTERS PANEL -->
+<div class="filters-section" id="filtersSection">
+  <div class="filters-inner">
+    <span class="filter-label">المستوى:</span>
+    <div class="filter-group">
+      <button class="filter-btn active" data-level="all">الكل</button>
+      <button class="filter-btn level-bac" data-level="bac">الباكالوريا</button>
+      <button class="filter-btn level-6" data-level="6">السادسة ابتدائي</button>
+      <button class="filter-btn level-4" data-level="4">الرابعة إعدادي</button>
+    </div>
+    <div class="filter-divider"></div>
+    <span class="filter-label">المادة:</span>
+    <div class="filter-group">
+      <button class="filter-btn active" data-subject="all">الكل</button>
+      <button class="filter-btn" data-subject="math">الرياضيات</button>
+      <button class="filter-btn" data-subject="arabic">اللغة العربية</button>
+      <button class="filter-btn" data-subject="french">اللغة الفرنسية</button>
+      <button class="filter-btn" data-subject="physics">الفيزياء</button>
+      <button class="filter-btn" data-subject="svt">علوم الحياة</button>
+      <button class="filter-btn" data-subject="history">التاريخ والجغرافيا</button>
+    </div>
+    <div class="filter-divider"></div>
+    <span class="filter-label">السنة:</span>
+    <div class="filter-group" id="yearFilters">
+      <button class="filter-btn active" data-year="all">الكل</button>
+    </div>
+    <div class="filter-divider"></div>
+    <button class="close-filters-btn" onclick="toggleFilters()">✕ إخفاء القائمة</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="section-header">
+    <h2 class="section-title">الامتحانات المتاحة</h2>
+    <span class="section-count" id="countBadge">0 امتحان</span>
+  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
+  <div class="empty" id="emptyState" style="display:none">
+    <div class="empty-icon">📭</div>
+    <h3>لا توجد امتحانات بعد</h3>
+    <p>افتح <a href="admin.html" style="color:var(--green);font-weight:700">لوحة الإدارة</a> لرفع أول امتحان</p>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="btn-download" onclick="closeModal()">إغلاق</button>
+      <button class="btn-view" id="modalDlBtn" style="display:none" onclick="doDownload()">⬇ تحميل PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>بوابة الامتحانات المغربية &copy; 2025 -- جميع الامتحانات من <strong>وزارة التربية الوطنية</strong></p>
+  <p style="margin-top:.4rem;opacity:.5;font-size:.75rem;">هذه المنصة للأغراض التعليمية فقط</p>
+</footer>
+
+<script>
+  const KEY = 'moroccoBacExams';
+  const levelNames  = { bac:'الباكالوريا', '6':'السادسة ابتدائي', '4':'الرابعة إعدادي' };
+  const badgeClass  = { bac:'badge-bac', '6':'badge-6', '4':'badge-4' };
+  const subjectIcons = { math:'📐', arabic:'📖', french:'🇫🇷', physics:'⚗️', svt:'🌿', history:'🗺️', english:'🌍', philosophy:'💭', islamic:'☪️', other:'📋' };
+  const subjectNames = { math:'الرياضيات', arabic:'اللغة العربية', french:'اللغة الفرنسية', physics:'الفيزياء والكيمياء', svt:'علوم الحياة والأرض', history:'التاريخ والجغرافيا', english:'اللغة الإنجليزية', philosophy:'الفلسفة', islamic:'التربية الإسلامية', other:'أخرى' };
+
+  let activeLevel = 'all', activeSubject = 'all', activeYear = 'all', searchQ = '';
+  let currentDownloadId = null;
+  let filtersOpen = false;
+
+  // ── Load exams from localStorage ──
+  function loadExams() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
+    catch { return []; }
+  }
+
+  // ── Toggle filters panel ──
+  function toggleFilters() {
+    filtersOpen = !filtersOpen;
+    const panel = document.getElementById('filtersSection');
+    const btn   = document.getElementById('toggleFiltersBtn');
+    if (filtersOpen) {
+      panel.classList.add('open');
+      btn.textContent = '▲ إخفاء الفلاتر';
+      btn.classList.add('is-open');
+    } else {
+      panel.classList.remove('open');
+      btn.textContent = '▼ إظهار الفلاتر';
+      btn.classList.remove('is-open');
+    }
+  }
+
+  // ── Build year filter buttons dynamically ──
+  function buildYearFilters() {
+    const exams = loadExams();
+    const years = [...new Set(exams.map(e => e.year))].sort((a,b) => b - a);
+    const group = document.getElementById('yearFilters');
+    group.innerHTML = `<button class="filter-btn active" data-year="all">الكل</button>` +
+      years.map(y => `<button class="filter-btn" data-year="${y}">${y}</button>`).join('');
+    group.querySelectorAll('[data-year]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        group.querySelectorAll('[data-year]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeYear = btn.dataset.year;
+        render();
+      });
+    });
+  }
+
+  // ── Update stats ──
+  function updateStats() {
+    const exams = loadExams();
+    document.getElementById('st-total').textContent    = exams.length;
+    document.getElementById('st-subjects').textContent = new Set(exams.map(e=>e.subject)).size;
+    document.getElementById('st-years').textContent    = new Set(exams.map(e=>e.year)).size;
+  }
+
+  // ── Filter + render cards ──
+  function render() {
+    const all = loadExams();
+    const list = all.filter(e =>
+      (activeLevel   === 'all' || e.level   === activeLevel) &&
+      (activeSubject === 'all' || e.subject === activeSubject) &&
+      (activeYear    === 'all' || String(e.year) === activeYear) &&
+      (searchQ === '' || e.title.includes(searchQ) || String(e.year).includes(searchQ) ||
+       (subjectNames[e.subject]||'').includes(searchQ) || (levelNames[e.level]||'').includes(searchQ))
+    );
+
+    const grid  = document.getElementById('cardsGrid');
+    const empty = document.getElementById('emptyState');
+    document.getElementById('countBadge').textContent = list.length + ' امتحان';
+
+    if (!list.length) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      if (!all.length) {
+        empty.innerHTML = `<div class="empty-icon">📭</div><h3>لا توجد امتحانات بعد</h3><p>افتح <a href="admin.html" style="color:var(--green);font-weight:700">لوحة الإدارة</a> لرفع أول امتحان</p>`;
+      } else {
+        empty.innerHTML = `<div class="empty-icon">🔎</div><h3>لا توجد نتائج</h3><p>جرب تغيير الفلاتر أو كلمة البحث</p>`;
+      }
+      return;
+    }
+
+    empty.style.display = 'none';
+    grid.innerHTML = list.map((e, i) => `
+      <div class="exam-card" style="animation-delay:${i*0.05}s">
+        <div class="card-top">
+          <span class="card-badge ${badgeClass[e.level]||'badge-bac'}">${levelNames[e.level]||e.level}</span>
+          <span class="card-year">${e.year}</span>
+        </div>
+        <div class="card-title">${subjectIcons[e.subject]||'📋'} ${e.title}</div>
+        <div class="card-meta">
+          <span>🗓️ ${e.session||'--'}</span>
+          <span>📍 ${e.region||'--'}</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn-view" onclick="openModal(${e.id})">
+            ${e.hasPdf ? '👁️ عرض PDF' : '📋 تفاصيل'}
+          </button>
+          <button class="btn-download" ${!e.hasPdf?'disabled':''} onclick="${e.hasPdf?`doDownload(${e.id})`:''}">
+            ${e.hasPdf ? '⬇ تحميل' : 'لا يوجد PDF'}
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── Modal ──
+  function openModal(id) {
+    const exam = loadExams().find(e => e.id === id);
+    if (!exam) return;
+    currentDownloadId = id;
+
+    document.getElementById('modalTitle').textContent = exam.title + ' -- ' + exam.year;
+    const body  = document.getElementById('modalBody');
+    const dlBtn = document.getElementById('modalDlBtn');
+
+    if (exam.hasPdf && exam.pdfData) {
+      body.innerHTML = `
+        <iframe src="${exam.pdfData}" style="width:100%;height:540px;border:none;border-radius:12px;background:#f0f0f0"></iframe>
+        ${exam.notes ? `<p style="margin-top:.75rem;font-size:.85rem;color:var(--muted)">📝 ${exam.notes}</p>` : ''}`;
+      dlBtn.style.display = 'flex';
+    } else {
+      body.innerHTML = `
+        <div class="no-pdf-box">
+          <div style="font-size:3rem">📄</div>
+          <div style="font-weight:700">${exam.title}</div>
+          <div style="font-size:.85rem">📍 ${exam.region||'--'} &nbsp;|&nbsp; 🗓️ ${exam.session||'--'} &nbsp;|&nbsp; 📅 ${exam.year}</div>
+          <div style="background:var(--green-pale);color:var(--green);padding:.6rem 1.2rem;border-radius:8px;font-size:.85rem;font-weight:700">
+            لم يتم رفع ملف PDF لهذا الامتحان بعد
+          </div>
+        </div>`;
+      dlBtn.style.display = 'none';
+    }
+
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    currentDownloadId = null;
+  }
+
+  function doDownload(id) {
+    const examId = id || currentDownloadId;
+    const exam = loadExams().find(e => e.id === examId);
+    if (!exam?.pdfData) return;
+    const a = document.createElement('a');
+    a.href = exam.pdfData;
+    a.download = exam.fileName || exam.title + '.pdf';
+    a.click();
+  }
+
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  // ── Filter buttons (level & subject) ──
+  document.querySelectorAll('[data-level]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-level]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeLevel = btn.dataset.level;
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-subject]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-subject]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeSubject = btn.dataset.subject;
+      render();
+    });
+  });
+
+  // ── Search ──
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchQ = e.target.value.trim();
+    render();
+  });
+
+  // ── Live sync when admin saves ──
+  window.addEventListener('storage', e => {
+    if (e.key === KEY) { buildYearFilters(); updateStats(); render(); }
+  });
+
+  // ── Init ──
+  buildYearFilters();
+  updateStats();
+  render();
+</script>
+</body>
+</html>
